@@ -1,0 +1,16 @@
+resources:
+  pipelines:
+    pipeline_pipeline_bi_estoque:
+      name: Pipeline BI - Estoque
+      libraries:
+        - glob:
+            include: /Workspace/Users/beatriz.inacio@institutojef.org.br/Pipeline BI -
+              Estoque/transformations/**
+      schema: default
+      continuous: false
+      development: false
+      photon: true
+      channel: CURRENT
+      catalog: workspace
+      serverless: true
+      root_path: /Workspace/Users/beatriz.inacio@institutojef.org.br/Pipeline BI - Estoque

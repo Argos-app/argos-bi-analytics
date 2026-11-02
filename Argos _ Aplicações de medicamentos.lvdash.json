@@ -1,0 +1,2620 @@
+{
+  "datasets": [
+    {
+      "name": "a522050c",
+      "displayName": "aplicacoes",
+      "queryLines": [
+        "SELECT\r\n",
+        "    aplicacao_id,\r\n",
+        "    data_aplicacao,\r\n",
+        "    propriedade_id,\r\n",
+        "    propriedade,\r\n",
+        "    cidade,\r\n",
+        "    estado,\r\n",
+        "    lote_id,\r\n",
+        "    codigo_lote,\r\n",
+        "    categoria_lote,\r\n",
+        "    lote_excecao,\r\n",
+        "    CASE\r\n",
+        "        WHEN lote_excecao = true THEN 'Exceção'\r\n",
+        "        WHEN lote_excecao = false THEN 'Não exceção'\r\n",
+        "        ELSE 'Não informado'\r\n",
+        "    END AS tipo_lote,\r\n",
+        "    lote_medicamento_id,\r\n",
+        "    lote_medicamento,\r\n",
+        "    medicamento_id,\r\n",
+        "    medicamento,\r\n",
+        "    categoria_medicamento,\r\n",
+        "    cabecas_aplicadas,\r\n",
+        "    via_aplicacao,\r\n",
+        "    fim_carencia,\r\n",
+        "    situacao_carencia,\r\n",
+        "    aplicacao_em_carencia\r\n",
+        "FROM workspace.argos_bi.aplicacoes_lake_gold;"
+      ]
+    },
+    {
+      "name": "1990a2bd",
+      "displayName": "estoque",
+      "queryLines": [
+        "SELECT\r\n",
+        "    movimentacao_id,\r\n",
+        "    data_movimentacao,\r\n",
+        "    tipo_movimentacao,\r\n",
+        "    motivo,\r\n",
+        "    lote_medicamento_id,\r\n",
+        "    lote_medicamento,\r\n",
+        "    validade,\r\n",
+        "    medicamento_id,\r\n",
+        "    medicamento,\r\n",
+        "    unidade,\r\n",
+        "    quantidade,\r\n",
+        "    CASE\r\n",
+        "        WHEN tipo_movimentacao = 'E' THEN 'Entrada'\r\n",
+        "        WHEN tipo_movimentacao = 'S' THEN 'Saída'\r\n",
+        "        ELSE 'Não informado'\r\n",
+        "    END AS movimentacao\r\n",
+        "FROM workspace.argos_bi.estoque_lake_gold;"
+      ]
+    },
+    {
+      "name": "3d203f02",
+      "displayName": "lotes",
+      "queryLines": [
+        "SELECT\r\n",
+        "    id AS lote_id,\r\n",
+        "    lot_code AS codigo_lote,\r\n",
+        "    category AS categoria_lote,\r\n",
+        "    head_count AS quantidade_animais,\r\n",
+        "    is_exception_lot AS lote_excecao\r\n",
+        "FROM dbargos_catalog.public.lot\r\n",
+        "WHERE active = true;"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "dd292201",
+      "displayName": "Visão Geral",
+      "layout": [
+        {
+          "widget": {
+            "name": "periodo",
+            "queries": [
+              {
+                "name": "dashboards/01f1d6c48f261e128a9c4c7274509798/datasets/01f1d6c4b36a17edbc9021dc475df752_monthly(data_aplicacao)",
+                "query": {
+                  "datasetName": "a522050c",
+                  "fields": [
+                    {
+                      "name": "monthly(data_aplicacao)",
+                      "expression": "DATE_TRUNC(\"MONTH\", `data_aplicacao`)"
+                    },
+                    {
+                      "name": "monthly(data_aplicacao)_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Período",
+                  "fields": []
+                }
+              },
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "monthly(data_aplicacao)",
+                    "displayName": "MONTHLY(data_aplicacao)",
+                    "queryName": "dashboards/01f1d6c48f261e128a9c4c7274509798/datasets/01f1d6c4b36a17edbc9021dc475df752_monthly(data_aplicacao)"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 4,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "propriedade",
+            "queries": [
+              {
+                "name": "dashboards/01f1d6c48f261e128a9c4c7274509798/datasets/01f1d6c4b36a17edbc9021dc475df752_propriedade",
+                "query": {
+                  "datasetName": "a522050c",
+                  "fields": [
+                    {
+                      "name": "propriedade",
+                      "expression": "`propriedade`"
+                    },
+                    {
+                      "name": "propriedade_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Propriedade",
+                  "fields": []
+                }
+              },
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "propriedade",
+                    "queryName": "dashboards/01f1d6c48f261e128a9c4c7274509798/datasets/01f1d6c4b36a17edbc9021dc475df752_propriedade"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 0,
+            "width": 4,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "categoria-medicamento",
+            "queries": [
+              {
+                "name": "dashboards/01f1d6c48f261e128a9c4c7274509798/datasets/01f1d6c4b36a17edbc9021dc475df752_categoria_medicamento",
+                "query": {
+                  "datasetName": "a522050c",
+                  "fields": [
+                    {
+                      "name": "categoria_medicamento",
+                      "expression": "`categoria_medicamento`"
+                    },
+                    {
+                      "name": "categoria_medicamento_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Categoria\n\nMedicamento",
+                  "fields": []
+                }
+              },
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "categoria_medicamento",
+                    "queryName": "dashboards/01f1d6c48f261e128a9c4c7274509798/datasets/01f1d6c4b36a17edbc9021dc475df752_categoria_medicamento"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 0,
+            "width": 4,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "aplicacoes-registradas",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a522050c",
+                  "fields": [
+                    {
+                      "name": "count(aplicacao_id)",
+                      "expression": "COUNT(`aplicacao_id`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Aplicações Registradas",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "count(aplicacao_id)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 1,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "0671f65e",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a522050c",
+                  "fields": [
+                    {
+                      "name": "sum(cabecas_aplicadas)",
+                      "expression": "SUM(`cabecas_aplicadas`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Cabeças em Aplicações",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(cabecas_aplicadas)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 1,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "67074375",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a522050c",
+                  "fields": [
+                    {
+                      "name": "countdistinct(propriedade_id)",
+                      "expression": "COUNT(DISTINCT `propriedade_id`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Propriedades com Aplicações",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "countdistinct(propriedade_id)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 1,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "59212c59",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a522050c",
+                  "fields": [
+                    {
+                      "name": "sum(aplicacao_em_carencia)",
+                      "expression": "SUM(`aplicacao_em_carencia`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Aplicações em Carência",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(aplicacao_em_carencia)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 1,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "aplicacoes-por-mes",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a522050c",
+                  "fields": [
+                    {
+                      "name": "monthly(data_aplicacao)",
+                      "expression": "DATE_TRUNC(\"MONTH\", `data_aplicacao`)"
+                    },
+                    {
+                      "name": "count(aplicacao_id)",
+                      "expression": "COUNT(`aplicacao_id`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Aplicações por Mês",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "mark": {
+                "colors": [
+                  "#06412F"
+                ],
+                "linePatterns": [
+                  "solid"
+                ],
+                "lineShape": "linear"
+              },
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "monthly(data_aplicacao)",
+                  "displayName": "Data da Aplicação",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "count(aplicacao_id)",
+                  "displayName": "Quantiodade de Aplicações",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 3,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "f5381a74",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a522050c",
+                  "fields": [
+                    {
+                      "name": "count(aplicacao_id)",
+                      "expression": "COUNT(`aplicacao_id`)"
+                    },
+                    {
+                      "name": "propriedade",
+                      "expression": "`propriedade`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Aplicações por Propriedade ",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "mark": {
+                "colors": [
+                  "#06412F"
+                ]
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "count(aplicacao_id)",
+                  "displayName": "Aplicações",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "propriedade",
+                  "displayName": "Nome da Propriedade",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 3,
+            "width": 6,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "5096700d",
+      "displayName": "Medicamentos e Carência",
+      "layout": [
+        {
+          "widget": {
+            "name": "data-aplicacao",
+            "queries": [
+              {
+                "name": "dashboards/01f1d6c48f261e128a9c4c7274509798/datasets/01f1d6c4b36a17edbc9021dc475df752_data_aplicacao",
+                "query": {
+                  "datasetName": "a522050c",
+                  "fields": [
+                    {
+                      "name": "data_aplicacao",
+                      "expression": "`data_aplicacao`"
+                    },
+                    {
+                      "name": "data_aplicacao_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Data Aplicação",
+                  "fields": []
+                }
+              },
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "data_aplicacao",
+                    "queryName": "dashboards/01f1d6c48f261e128a9c4c7274509798/datasets/01f1d6c4b36a17edbc9021dc475df752_data_aplicacao"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 3,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "propriedade",
+            "queries": [
+              {
+                "name": "dashboards/01f1d6c48f261e128a9c4c7274509798/datasets/01f1d6c4b36a17edbc9021dc475df752_propriedade",
+                "query": {
+                  "datasetName": "a522050c",
+                  "fields": [
+                    {
+                      "name": "propriedade",
+                      "expression": "`propriedade`"
+                    },
+                    {
+                      "name": "propriedade_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Propriedade",
+                  "fields": []
+                }
+              },
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "propriedade",
+                    "queryName": "dashboards/01f1d6c48f261e128a9c4c7274509798/datasets/01f1d6c4b36a17edbc9021dc475df752_propriedade"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 0,
+            "width": 3,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "medicamento",
+            "queries": [
+              {
+                "name": "dashboards/01f1d6c48f261e128a9c4c7274509798/datasets/01f1d6c4b36a17edbc9021dc475df752_medicamento",
+                "query": {
+                  "datasetName": "a522050c",
+                  "fields": [
+                    {
+                      "name": "medicamento",
+                      "expression": "`medicamento`"
+                    },
+                    {
+                      "name": "medicamento_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Medicamento",
+                  "fields": []
+                }
+              },
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "medicamento",
+                    "queryName": "dashboards/01f1d6c48f261e128a9c4c7274509798/datasets/01f1d6c4b36a17edbc9021dc475df752_medicamento"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 0,
+            "width": 3,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "categoria-med",
+            "queries": [
+              {
+                "name": "dashboards/01f1d6c48f261e128a9c4c7274509798/datasets/01f1d6c4b36a17edbc9021dc475df752_categoria_medicamento",
+                "query": {
+                  "datasetName": "a522050c",
+                  "fields": [
+                    {
+                      "name": "categoria_medicamento",
+                      "expression": "`categoria_medicamento`"
+                    },
+                    {
+                      "name": "categoria_medicamento_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Categoria - Med",
+                  "fields": []
+                }
+              },
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "categoria_medicamento",
+                    "queryName": "dashboards/01f1d6c48f261e128a9c4c7274509798/datasets/01f1d6c4b36a17edbc9021dc475df752_categoria_medicamento"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 0,
+            "width": 3,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "medicamentos-utilizados",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a522050c",
+                  "fields": [
+                    {
+                      "name": "countdistinct(medicamento_id)",
+                      "expression": "COUNT(DISTINCT `medicamento_id`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Medicamentos Utilizados",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "countdistinct(medicamento_id)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 1,
+            "width": 6,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "aplicacoes-carencia",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a522050c",
+                  "fields": [
+                    {
+                      "name": "sum(aplicacao_em_carencia)",
+                      "expression": "SUM(`aplicacao_em_carencia`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Aplicações em Carência",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(aplicacao_em_carencia)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 1,
+            "width": 6,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "aplicacoes-por-medicamento",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a522050c",
+                  "fields": [
+                    {
+                      "name": "count(medicamento_id)",
+                      "expression": "COUNT(`medicamento_id`)"
+                    },
+                    {
+                      "name": "medicamento",
+                      "expression": "`medicamento`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Aplicações por Medicamento",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "mark": {
+                "colors": [
+                  "#06412F"
+                ]
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "count(medicamento_id)",
+                  "displayName": "Quantidade",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "medicamento",
+                  "displayName": "Medicamento",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 3,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "detalhes-aplicacoes",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a522050c",
+                  "fields": [
+                    {
+                      "name": "data_aplicacao",
+                      "expression": "`data_aplicacao`"
+                    },
+                    {
+                      "name": "propriedade",
+                      "expression": "`propriedade`"
+                    },
+                    {
+                      "name": "codigo_lote",
+                      "expression": "`codigo_lote`"
+                    },
+                    {
+                      "name": "medicamento",
+                      "expression": "`medicamento`"
+                    },
+                    {
+                      "name": "cabecas_aplicadas",
+                      "expression": "`cabecas_aplicadas`"
+                    },
+                    {
+                      "name": "via_aplicacao",
+                      "expression": "`via_aplicacao`"
+                    },
+                    {
+                      "name": "fim_carencia",
+                      "expression": "`fim_carencia`"
+                    },
+                    {
+                      "name": "situacao_carencia",
+                      "expression": "`situacao_carencia`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Detalhes das Aplicações",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "data_aplicacao",
+                    "displayName": "Data da Aplicação"
+                  },
+                  {
+                    "fieldName": "propriedade",
+                    "displayName": "Propriedade"
+                  },
+                  {
+                    "fieldName": "codigo_lote",
+                    "displayName": "Cód. Lote"
+                  },
+                  {
+                    "fieldName": "medicamento",
+                    "displayName": "Medicamento"
+                  },
+                  {
+                    "fieldName": "cabecas_aplicadas",
+                    "displayName": "Cabeças Aplicadas"
+                  },
+                  {
+                    "fieldName": "via_aplicacao",
+                    "displayName": "Via Aplicação"
+                  },
+                  {
+                    "fieldName": "fim_carencia",
+                    "displayName": "Fim da Carência"
+                  },
+                  {
+                    "fieldName": "situacao_carencia",
+                    "displayName": "Situação Carência"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 3,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "situacao-carencia-aplicacoes",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a522050c",
+                  "fields": [
+                    {
+                      "name": "situacao_carencia",
+                      "expression": "`situacao_carencia`"
+                    },
+                    {
+                      "name": "count(aplicacao_id)",
+                      "expression": "COUNT(`aplicacao_id`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Situação de Carência das Aplicações\n<p>&nbsp;</p>\n",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "mark": {
+                "colors": [
+                  "#06412F"
+                ]
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "situacao_carencia",
+                  "displayName": "Situação Carência ",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "count(aplicacao_id)",
+                  "displayName": "Aplicações",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 9,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "aplicacoes-por-via",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a522050c",
+                  "fields": [
+                    {
+                      "name": "via_aplicacao",
+                      "expression": "`via_aplicacao`"
+                    },
+                    {
+                      "name": "count(aplicacao_id)",
+                      "expression": "COUNT(`aplicacao_id`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Aplicações por via ",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "mark": {
+                "colors": [
+                  "#06412F"
+                ]
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "via_aplicacao",
+                  "displayName": "Via Aplicação",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "count(aplicacao_id)",
+                  "displayName": "Aplicações",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 9,
+            "width": 6,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "54126dd9",
+      "displayName": "Lotes e Rebanho",
+      "layout": [
+        {
+          "widget": {
+            "name": "23810348",
+            "queries": [
+              {
+                "name": "dashboards/01f1d6c48f261e128a9c4c7274509798/datasets/01f1d6c4b36a17edbc9021dc475df752_data_aplicacao",
+                "query": {
+                  "datasetName": "a522050c",
+                  "fields": [
+                    {
+                      "name": "data_aplicacao",
+                      "expression": "`data_aplicacao`"
+                    },
+                    {
+                      "name": "data_aplicacao_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Data Aplicação",
+                  "fields": []
+                }
+              },
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "data_aplicacao",
+                    "queryName": "dashboards/01f1d6c48f261e128a9c4c7274509798/datasets/01f1d6c4b36a17edbc9021dc475df752_data_aplicacao"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 3,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "ced42f19",
+            "queries": [
+              {
+                "name": "dashboards/01f1d6c48f261e128a9c4c7274509798/datasets/01f1d6c4b36a17edbc9021dc475df752_propriedade",
+                "query": {
+                  "datasetName": "a522050c",
+                  "fields": [
+                    {
+                      "name": "propriedade",
+                      "expression": "`propriedade`"
+                    },
+                    {
+                      "name": "propriedade_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Propriedade",
+                  "fields": []
+                }
+              },
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "propriedade",
+                    "queryName": "dashboards/01f1d6c48f261e128a9c4c7274509798/datasets/01f1d6c4b36a17edbc9021dc475df752_propriedade"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 0,
+            "width": 3,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "05fd809c",
+            "queries": [
+              {
+                "name": "dashboards/01f1d6c48f261e128a9c4c7274509798/datasets/01f1d6c4b36a17edbc9021dc475df752_categoria_lote",
+                "query": {
+                  "datasetName": "a522050c",
+                  "fields": [
+                    {
+                      "name": "categoria_lote",
+                      "expression": "`categoria_lote`"
+                    },
+                    {
+                      "name": "categoria_lote_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Categoria Lote",
+                  "fields": []
+                }
+              },
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "categoria_lote",
+                    "queryName": "dashboards/01f1d6c48f261e128a9c4c7274509798/datasets/01f1d6c4b36a17edbc9021dc475df752_categoria_lote"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 0,
+            "width": 3,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "8a876905",
+            "queries": [
+              {
+                "name": "dashboards/01f1d6c48f261e128a9c4c7274509798/datasets/01f1d6c4b36a17edbc9021dc475df752_lote_excecao",
+                "query": {
+                  "datasetName": "a522050c",
+                  "fields": [
+                    {
+                      "name": "lote_excecao",
+                      "expression": "`lote_excecao`"
+                    },
+                    {
+                      "name": "lote_excecao_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Lote Exceção",
+                  "fields": []
+                }
+              },
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "lote_excecao",
+                    "queryName": "dashboards/01f1d6c48f261e128a9c4c7274509798/datasets/01f1d6c4b36a17edbc9021dc475df752_lote_excecao"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 0,
+            "width": 3,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "03887e8e",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a522050c",
+                  "fields": [
+                    {
+                      "name": "countdistinct(lote_id)",
+                      "expression": "COUNT(DISTINCT `lote_id`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Lotes Com Aplicações",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "countdistinct(lote_id)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 1,
+            "width": 6,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "57fb78fc",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a522050c",
+                  "fields": [
+                    {
+                      "name": "sum(cabecas_aplicadas)",
+                      "expression": "SUM(`cabecas_aplicadas`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Cabeças em Aplicações",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(cabecas_aplicadas)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 1,
+            "width": 6,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "a2eb725b",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a522050c",
+                  "fields": [
+                    {
+                      "name": "categoria_lote",
+                      "expression": "`categoria_lote`"
+                    },
+                    {
+                      "name": "count(aplicacao_id)",
+                      "expression": "COUNT(`aplicacao_id`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Aplicações por Categoria de Lote",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "mark": {
+                "colors": [
+                  "#06412F"
+                ]
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "categoria_lote",
+                  "displayName": "Categoria",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "count(aplicacao_id)",
+                  "displayName": "Aplicações",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 3,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "c87bee29",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a522050c",
+                  "fields": [
+                    {
+                      "name": "cabecas_aplicadas",
+                      "expression": "`cabecas_aplicadas`"
+                    },
+                    {
+                      "name": "count(aplicacao_id)",
+                      "expression": "COUNT(`aplicacao_id`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Distribuição de Cabeças por Aplicação",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "mark": {
+                "colors": [
+                  "#06412F"
+                ]
+              },
+              "widgetType": "histogram",
+              "encodings": {
+                "x": {
+                  "fieldName": "cabecas_aplicadas",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "compact",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    }
+                  },
+                  "displayName": "Cabeças por Aplicação",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "count(aplicacao_id)",
+                  "displayName": "Aplicações",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 3,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "3c0807be",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a522050c",
+                  "fields": [
+                    {
+                      "name": "count(aplicacao_id)",
+                      "expression": "COUNT(`aplicacao_id`)"
+                    },
+                    {
+                      "name": "tipo_lote",
+                      "expression": "`tipo_lote`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Aplicações em lotes comuns e de exceção",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "mark": {
+                "colors": [
+                  "#06412F"
+                ]
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "count(aplicacao_id)",
+                  "displayName": "Aplicações",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "tipo_lote",
+                  "displayName": "Lote ",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 9,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "bc845365",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "a522050c",
+                  "fields": [
+                    {
+                      "name": "categoria_lote",
+                      "expression": "`categoria_lote`"
+                    },
+                    {
+                      "name": "sum(aplicacao_em_carencia)",
+                      "expression": "SUM(`aplicacao_em_carencia`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Cabeças por Aplicação e Categoria de Lote",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "mark": {
+                "colors": [
+                  "#06412F"
+                ]
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "categoria_lote",
+                  "displayName": "Categoria ",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(aplicacao_em_carencia)",
+                  "displayName": "Aplicações",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 9,
+            "width": 6,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "6ccaac55",
+      "displayName": "Estoque",
+      "layout": [
+        {
+          "widget": {
+            "name": "d89b66bf",
+            "queries": [
+              {
+                "name": "dashboards/01f1d6c48f261e128a9c4c7274509798/datasets/01f1d6cae62019bea24ad78cbce44c06_data_movimentacao",
+                "query": {
+                  "datasetName": "1990a2bd",
+                  "fields": [
+                    {
+                      "name": "data_movimentacao",
+                      "expression": "`data_movimentacao`"
+                    },
+                    {
+                      "name": "data_movimentacao_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Data\n\nMovimentação",
+                  "fields": []
+                }
+              },
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "data_movimentacao",
+                    "queryName": "dashboards/01f1d6c48f261e128a9c4c7274509798/datasets/01f1d6cae62019bea24ad78cbce44c06_data_movimentacao"
+                  }
+                ]
+              }
+            },
+            "specExtensions": {
+              "widgetBackgroundColor": {
+                "dark": "#F0EBE2"
+              },
+              "widgetBorderColor": {
+                "dark": "#D9D8D8"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 3,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "468b1d08",
+            "queries": [
+              {
+                "name": "dashboards/01f1d6c48f261e128a9c4c7274509798/datasets/01f1d6cae62019bea24ad78cbce44c06_medicamento",
+                "query": {
+                  "datasetName": "1990a2bd",
+                  "fields": [
+                    {
+                      "name": "medicamento",
+                      "expression": "`medicamento`"
+                    },
+                    {
+                      "name": "medicamento_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Medicamento",
+                  "fields": []
+                }
+              },
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "medicamento",
+                    "queryName": "dashboards/01f1d6c48f261e128a9c4c7274509798/datasets/01f1d6cae62019bea24ad78cbce44c06_medicamento"
+                  }
+                ]
+              }
+            },
+            "specExtensions": {
+              "widgetBackgroundColor": {
+                "dark": "#F0EBE2"
+              },
+              "widgetBorderColor": {
+                "dark": "#D9D8D8"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 0,
+            "width": 3,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "14db2f20",
+            "queries": [
+              {
+                "name": "dashboards/01f1d6c48f261e128a9c4c7274509798/datasets/01f1d6cae62019bea24ad78cbce44c06_unidade",
+                "query": {
+                  "datasetName": "1990a2bd",
+                  "fields": [
+                    {
+                      "name": "unidade",
+                      "expression": "`unidade`"
+                    },
+                    {
+                      "name": "unidade_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Unidade",
+                  "fields": []
+                }
+              },
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "unidade",
+                    "queryName": "dashboards/01f1d6c48f261e128a9c4c7274509798/datasets/01f1d6cae62019bea24ad78cbce44c06_unidade"
+                  }
+                ]
+              }
+            },
+            "specExtensions": {
+              "widgetBackgroundColor": {
+                "dark": "#F0EBE2"
+              }
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 0,
+            "width": 3,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "591eb2cb",
+            "queries": [
+              {
+                "name": "dashboards/01f1d6c48f261e128a9c4c7274509798/datasets/01f1d6cae62019bea24ad78cbce44c06_movimentacao",
+                "query": {
+                  "datasetName": "1990a2bd",
+                  "fields": [
+                    {
+                      "name": "movimentacao",
+                      "expression": "`movimentacao`"
+                    },
+                    {
+                      "name": "movimentacao_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Tipo Movimentação",
+                  "fields": []
+                }
+              },
+              "widgetType": "filter-multi-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "movimentacao",
+                    "queryName": "dashboards/01f1d6c48f261e128a9c4c7274509798/datasets/01f1d6cae62019bea24ad78cbce44c06_movimentacao"
+                  }
+                ]
+              }
+            },
+            "specExtensions": {
+              "widgetBackgroundColor": {
+                "dark": "#F0EBE2"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 0,
+            "width": 3,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "e1ba4d44",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "1990a2bd",
+                  "fields": [
+                    {
+                      "name": "countdistinct(movimentacao_id)",
+                      "expression": "COUNT(DISTINCT `movimentacao_id`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Movimentações Registradas",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "countdistinct(movimentacao_id)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            },
+            "specExtensions": {
+              "widgetBackgroundColor": {
+                "dark": "#F0EBE2"
+              },
+              "widgetBorderColor": {
+                "dark": "#E3DADA"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 1,
+            "width": 6,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "992f3fdc",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "1990a2bd",
+                  "fields": [
+                    {
+                      "name": "countdistinct(movimentacao_id)",
+                      "expression": "COUNT(DISTINCT `movimentacao_id`)"
+                    },
+                    {
+                      "name": "movimentacao",
+                      "expression": "`movimentacao`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Movimentações de Estoque por Mês",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "countdistinct(movimentacao_id)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Quantidade"
+                },
+                "color": {
+                  "fieldName": "movimentacao",
+                  "displayName": "Movimentação",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "Saída",
+                        "color": "#06412F"
+                      },
+                      {
+                        "value": "Entrada",
+                        "color": "#321201"
+                      }
+                    ]
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            },
+            "specExtensions": {
+              "widgetBackgroundColor": {
+                "dark": "#F0EBE2"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 3,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "c561b6f6",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "1990a2bd",
+                  "fields": [
+                    {
+                      "name": "countdistinct(medicamento_id)",
+                      "expression": "COUNT(DISTINCT `medicamento_id`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Medicamentos Movimentados",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "countdistinct(medicamento_id)"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            },
+            "specExtensions": {
+              "widgetBackgroundColor": {
+                "dark": "#F0EBE2"
+              },
+              "widgetBorderColor": {
+                "dark": "#C4B9B9"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 1,
+            "width": 6,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "0e806dcc",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "1990a2bd",
+                  "fields": [
+                    {
+                      "name": "data_movimentacao",
+                      "expression": "`data_movimentacao`"
+                    },
+                    {
+                      "name": "medicamento",
+                      "expression": "`medicamento`"
+                    },
+                    {
+                      "name": "lote_medicamento",
+                      "expression": "`lote_medicamento`"
+                    },
+                    {
+                      "name": "validade",
+                      "expression": "`validade`"
+                    },
+                    {
+                      "name": "tipo_movimentacao",
+                      "expression": "`tipo_movimentacao`"
+                    },
+                    {
+                      "name": "motivo",
+                      "expression": "`motivo`"
+                    },
+                    {
+                      "name": "quantidade",
+                      "expression": "`quantidade`"
+                    },
+                    {
+                      "name": "unidade",
+                      "expression": "`unidade`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Movimentações",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "data_movimentacao"
+                  },
+                  {
+                    "fieldName": "medicamento"
+                  },
+                  {
+                    "fieldName": "lote_medicamento"
+                  },
+                  {
+                    "fieldName": "validade"
+                  },
+                  {
+                    "fieldName": "tipo_movimentacao"
+                  },
+                  {
+                    "fieldName": "motivo"
+                  },
+                  {
+                    "fieldName": "quantidade"
+                  },
+                  {
+                    "fieldName": "unidade"
+                  }
+                ]
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            },
+            "specExtensions": {
+              "widgetBackgroundColor": {
+                "dark": "#F0EBE2"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 9,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "b881f233",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "1990a2bd",
+                  "fields": [
+                    {
+                      "name": "movimentacao",
+                      "expression": "`movimentacao`"
+                    },
+                    {
+                      "name": "count(movimentacao_id)",
+                      "expression": "COUNT(`movimentacao_id`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Quantidade de Movimentações por Tipo",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "mark": {
+                "colors": [
+                  "#06412F"
+                ]
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "movimentacao",
+                  "displayName": "Movimentação",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "count(movimentacao_id)",
+                  "displayName": "Quantidade",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            },
+            "specExtensions": {
+              "widgetBackgroundColor": {
+                "dark": "#F0EBE2"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 3,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "e62fe052",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "1990a2bd",
+                  "fields": [
+                    {
+                      "name": "movimentacao",
+                      "expression": "`movimentacao`"
+                    },
+                    {
+                      "name": "min(quantidade)",
+                      "expression": "MIN(`quantidade`)"
+                    },
+                    {
+                      "name": "q1(quantidade)",
+                      "expression": "PERCENTILE(`quantidade`, 0.25)"
+                    },
+                    {
+                      "name": "median(quantidade)",
+                      "expression": "MEDIAN(`quantidade`)"
+                    },
+                    {
+                      "name": "q3(quantidade)",
+                      "expression": "PERCENTILE(`quantidade`, 0.75)"
+                    },
+                    {
+                      "name": "max(quantidade)",
+                      "expression": "MAX(`quantidade`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Quantidade de Movimentações\n<p>&nbsp;</p>\n",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "style": {
+                "fontColor": {
+                  "dark": "#321201"
+                }
+              },
+              "widgetType": "box",
+              "encodings": {
+                "x": {
+                  "fieldName": "movimentacao",
+                  "displayName": "Movimentação",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "whiskerStart": {
+                    "fieldName": "min(quantidade)"
+                  },
+                  "boxStart": {
+                    "fieldName": "q1(quantidade)"
+                  },
+                  "boxMid": {
+                    "fieldName": "median(quantidade)"
+                  },
+                  "boxEnd": {
+                    "fieldName": "q3(quantidade)"
+                  },
+                  "whiskerEnd": {
+                    "fieldName": "max(quantidade)"
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            },
+            "specExtensions": {
+              "widgetBackgroundColor": {
+                "dark": "#F0EBE2"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 9,
+            "width": 6,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "canvasBackgroundColor": {
+        "light": "#FAFAFB",
+        "dark": "#D0C6B2"
+      },
+      "widgetBackgroundColor": {
+        "light": "#FFFFFF",
+        "dark": "#F4F1EB"
+      },
+      "fontColor": {
+        "light": "#11171C",
+        "dark": "#E8ECF0"
+      },
+      "selectionColor": {
+        "light": "#2272B4",
+        "dark": "#8ACAFF"
+      },
+      "visualizationColors": [
+        "#077A9D",
+        "#FFAB00",
+        "#00A972",
+        "#FF3621",
+        "#8BCAE7",
+        "#AB4057",
+        "#99DDB4",
+        "#FCA4A1",
+        "#919191",
+        "#BF7080"
+      ],
+      "widgetHeaderAlignment": "LEFT",
+      "fontFamily": "DM Sans",
+      "widgetMargin": 12,
+      "fontSettings": {
+        "base": {
+          "fontFamily": "DM Sans",
+          "fontSize": 15
+        },
+        "widgetTitle": {
+          "fontColor": {
+            "dark": "#191919"
+          }
+        }
+      }
+    },
+    "applyModeEnabled": false
+  }
+}
